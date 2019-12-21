@@ -2,14 +2,27 @@ import * as path from "path";
 import express from "express";
 import WebSocket from "ws";
 import session from "express-session";
+import hbs from "express-handlebars";
 
 import { Room } from "./users/room";
 import { Teacher } from "./users/teacher";
 import { Student } from './users/student';
 
 const port = process.env.PORT || 5000;
+const rootDir = process.cwd();
 
 const app = express();
+
+app.set("view engine", "hbs");
+
+app.engine(
+    "hbs",
+    hbs({
+        extname: "hbs",
+        defaultView: "default",
+        layoutsDir: path.join(rootDir, "/views/layouts/"),
+    })
+);
 
 const rooms = {};
 
@@ -51,7 +64,11 @@ app.get('/room/:id', (req, res) => {
     }
 
     const role = req.session.id === room.teacher.id ? 'teacher' : 'student';
-    res.render(role, {roomId: req.body.roomId});
+    res.render(role, {
+        layout: "default",
+        name: req.body.name,
+        roomId: req.body.roomId
+    });
 });
 
 const server = app.listen(port);
