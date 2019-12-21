@@ -6,7 +6,6 @@
 </script>
 <ul class="list">
     {{#each students}}
-        {{#if_neq this.role 0}}
             <div id="div{{this.role}}" class="form-row" style="margin: 30px">
                 <div class="col">
                     <label>{{this.name}}</label>
@@ -20,7 +19,6 @@
                     <input class="btn" style="background-color: red" type="submit" value="X">
                 </div>
             </div>
-        {{/if_neq}}
     {{/each}}
 </ul>
 
