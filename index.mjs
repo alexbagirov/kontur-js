@@ -3,6 +3,7 @@ import express from "express";
 import WebSocket from "ws";
 import session from "express-session";
 import hbs from "express-handlebars";
+import bodyParser from "body-parser";
 
 import { Room } from "./users/room";
 import { Teacher } from "./users/teacher";
@@ -31,43 +32,48 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    cookie: { secure: false }
 }));
 
-app.post('/room/create', (req, res) => {
+app.use(bodyParser.urlencoded({ extended: false }))
+
+
+app.get('/room/create', (req, res) => {
     const teacher = new Teacher('teacher');
     const room = new Room(teacher);
     rooms[room.id] = room;
-    req.session.id = teacher.id;
+    req.session.userId = teacher.id;
+    console.log('created');
     res.redirect(`/room/${room.id}`);
 });
 
-app.get('/room/join', (req, res) => {
+app.post('/room/join', (req, res) => {
     if (!req.body.roomId in rooms) {
         res.send('No such room');
     }
 
     const student = new Student(req.body.name);
-    rooms[req.body.roomId].students[student.id] = student;
-    req.session.id = student.id;
+    rooms[req.body.roomId].users[student.id] = student;
+    req.session.userId = student.id;
     res.redirect(`/room/${req.body.roomId}`);
 });
 
 app.get('/room/:id', (req, res) => {
-    if (!req.body.roomId in rooms) {
+    console.log(req.params.id);
+    if (!req.params.id in rooms) {
         res.send('No such room');
     }
 
-    const room = rooms[req.body.roomId];
-    if (!req.session.id in room.students) {
+    const room = rooms[req.params.id];
+    if (!req.session.userId in room.users) {
         res.send('You must join the room');
     }
-
-    const role = req.session.id === room.teacher.id ? 'teacher' : 'student';
+    const user = room.users[req.session.userId];
+    const role = user.role === 1 ? 'teacher' : 'student';
     res.render(role, {
         layout: "default",
-        name: req.body.name,
-        roomId: req.body.roomId
+        name: user.name,
+        roomId: req.params.id
     });
 });
 
