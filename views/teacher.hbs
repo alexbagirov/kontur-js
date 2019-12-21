@@ -4,44 +4,23 @@
         userId: {{usedId}}
     };
 </script>
-<form id="form0" style="width:40%" name="form">
-    <div id="div1" class="form-row" style="margin: 30px">
-        <div class="col">
-            <label>Name1</label>
-        </div>
-        <div class="col" name="user_1">
-            <input class="btn" style="background-color: greenyellow" type="submit" value="Вопрос">
-            <input class="btn" style="background-color: red" type="submit" value="X">
-        </div>
-        <div class="col" name="user_1">
-            <input class="btn" style="background-color: blue" type="submit" value="Ответ">
-            <input class="btn" style="background-color: red" type="submit" value="X">
-        </div>
-    </div>
-    <div id="div2" class="form-row" style="margin: 30px">
-        <div class="col">
-            <label>Name2</label>
-        </div>
-        <div class="col" name="user_2">
-            <input class="btn" style="background-color: greenyellow" type="submit" value="Вопрос">
-            <input class="btn" style="background-color: red" type="submit" value="X">
-        </div>
-        <div class="col" name="user_2">
-            <input class="btn" style="background-color: blue" type="submit" value="Ответ">
-            <input class="btn" style="background-color: red" type="submit" value="X">
-        </div>
-    </div>
-    <div id="div3" class="form-row" style="margin: 30px">
-        <div class="col">
-            <label>Name3</label>
-        </div>
-        <div class="col" name="user_3">
-            <input class="btn" style="background-color: greenyellow" type="submit" value="Вопрос">
-            <input class="btn" style="background-color: red" type="submit" value="X">
-        </div>
-        <div class="col" name="user_3">
-            <input class="btn" style="background-color: blue" type="submit" value="Ответ">
-            <input class="btn" style="background-color: red" type="submit" value="X">
-        </div>
-    </div>
-</form>
+<ul class="list">
+    {{#each students}}
+        {{#if_neq this.role 0}}
+            <div id="div{{this.role}}" class="form-row" style="margin: 30px">
+                <div class="col">
+                    <label>{{this.name}}</label>
+                </div>
+                <div class="col" name="name{{this.role}}">
+                    <input class="btn" style="background-color: greenyellow" type="submit" value="Вопрос">
+                    <input class="btn" style="background-color: red" type="submit" value="X">
+                </div>
+                <div class="col"name="name{{this.role}}">
+                    <input class="btn" style="background-color: blue" type="submit" value="Ответ">
+                    <input class="btn" style="background-color: red" type="submit" value="X">
+                </div>
+            </div>
+        {{/if_neq}}
+    {{/each}}
+</ul>
+
