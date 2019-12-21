@@ -3,13 +3,14 @@ import express from "express";
 import WebSocket from "ws";
 import session from "express-session";
 import {Teacher} from "users/teacher";
+import {Student} from 'users/student';
 import {Room} from "./room";
 
 const port = process.env.PORT || 5000;
 
 const app = express();
 
-const rooms = [];
+const rooms = {};
 
 
 app.use(express.static(path.join(process.cwd(), "static")));
@@ -23,9 +24,34 @@ app.use(session({
 app.post('/room/create', (req, res) => {
     const teacher = new Teacher('teacher');
     const room = new Room(teacher);
-    rooms.push(room);
+    rooms[room.id] = room;
     req.session.id = teacher.id;
     res.redirect(`/room/${room.id}`);
+});
+
+app.get('/room/join', (req, res) => {
+    if (!req.body.roomId in rooms) {
+        res.send('No such room');
+    }
+
+    const student = new Student(req.body.name);
+    rooms[req.body.roomId].students[student.id] = student;
+    req.session.id = student.id;
+    res.redirect(`/room/${req.body.roomId}`);
+});
+
+app.get('/room/:id', (req, res) => {
+    if (!req.body.roomId in rooms) {
+        res.send('No such room');
+    }
+
+    const room = rooms[req.body.roomId];
+    if (!req.session.id in room.students) {
+        res.send('You must join the room');
+    }
+
+    const role = req.session.id === room.teacher.id ? 'teacher' : 'student';
+    res.render(role, {roomId: req.body.roomId});
 });
 
 const server = app.listen(port);
