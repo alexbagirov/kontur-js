@@ -4,8 +4,8 @@ import WebSocket from "ws";
 import session from "express-session";
 
 import { Room } from "./users/room";
-import {Teacher} from "users/teacher";
-import {Student} from 'users/student';
+import { Teacher } from "./users/teacher";
+import { Student } from './users/student';
 
 const port = process.env.PORT || 5000;
 
