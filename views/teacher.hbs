@@ -6,17 +6,9 @@
 </script>
 <ul class="list">
     {{#each students}}
-            <div id="div{{this.role}}" class="form-row" style="margin: 30px">
+            <div id="div{{this.id}}" class="form-row" style="margin: 30px">
                 <div class="col">
                     <label>{{this.name}}</label>
-                </div>
-                <div class="col" name="name{{this.role}}">
-                    <input class="btn" style="background-color: greenyellow" type="submit" value="Вопрос">
-                    <input class="btn" style="background-color: red" type="submit" value="X">
-                </div>
-                <div class="col"name="name{{this.role}}">
-                    <input class="btn" style="background-color: blue" type="submit" value="Ответ">
-                    <input class="btn" style="background-color: red" type="submit" value="X">
                 </div>
             </div>
     {{/each}}
