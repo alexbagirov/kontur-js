@@ -71,18 +71,19 @@ app.get('/room/:id', (req, res) => {
     const user = room.users[req.session.userId];
     const role = user.role === 1 ? 'teacher' : 'student';
     if (role === 'teacher') {
+        const students = Object.values(room.users).filter(u => u.role === 2);
         res.render('teacher', {
             layout: "default",
             roomId: req.params.id,
-            userId: user.userId,
-            students: Object.values(room.users)
+            userId: user.id,
+            students: students
         });
     } else {
         res.render('student', {
             layout: "default",
             name: user.name,
             roomId: req.params.id,
-            userId: user.userId
+            userId: user.id
         });
     }
 
