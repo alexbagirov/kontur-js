@@ -4,6 +4,7 @@ import WebSocket from "ws";
 import session from "express-session";
 import hbs from "express-handlebars";
 import bodyParser from "body-parser";
+import expressWs from "express-ws";
 
 import { Room } from "./users/room";
 import { Teacher } from "./users/teacher";
@@ -13,6 +14,7 @@ const port = process.env.PORT || 5000;
 const rootDir = process.cwd();
 
 const app = express();
+const ws = expressWs(app);
 
 app.set("view engine", "hbs");
 
@@ -89,18 +91,32 @@ app.get('/room/:id', (req, res) => {
 
 });
 
-const server = app.listen(port);
+app.ws('/room/ws/:id', function (ws, req) {
+    ws.on('message', function (msg) {
+        const data = JSON.parse(msg);
+        switch (data['type']) {
+            case 'openQuestion':
+                break;
+            case 'openAnswer':
+                break;
+            case 'closeQuestion':
 
-const wss = new WebSocket.Server({
-    noServer: true
-});
+                ws.send('ok');
+                break;
+            case 'closeAnswer':
 
-wss.on('connection', function connection(ws) {
-
-});
-
-server.on("upgrade", (req, socket, head) => {
-    wss.handleUpgrade(req, socket, head, ws => {
-        wss.emit("connection", ws, req);
+                ws.send('ok');
+                break;
+            case 'getUsers':
+                ws.send(JSON.stringify(rooms[req.params.id].users));
+                break;
+            default:
+                ws.send('error');
+                console.log(data);
+                break;
+        }
     });
 });
+
+const server = app.listen(port);
+
