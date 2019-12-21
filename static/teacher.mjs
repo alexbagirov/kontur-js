@@ -1,3 +1,8 @@
+const connect = () => {
+    const url = `${location.origin.replace(/^http/, "ws")}/room/ws/${user.roomId}`;
+    return new WebSocket(url);
+};
+
 const ws = connect();
 
 ws.addEventListener('message', function (event)  {
@@ -12,10 +17,7 @@ ws.addEventListener('message', function (event)  {
 });
 
 
-const connect = () => {
-    const url = `${location.origin.replace(/^http/, "ws")}/ws`;
-    return new WebSocket(url);
-};
+
 
 
 function handleNewStudent (name, id) {
@@ -23,7 +25,7 @@ function handleNewStudent (name, id) {
     let newDiv = document.createElement("div");
     newDiv.id = 'div' + student.id;
     newDiv.innerHTML = '<div class="col">' + 
-            '<label>${student.name}</label></div>';
+            `<label>${student.name}</label></div>`;
     document.getElementById("ul1").append(newDiv)
 }
 
