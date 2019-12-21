@@ -75,7 +75,7 @@ app.get('/room/:id', (req, res) => {
             layout: "default",
             roomId: req.params.id,
             userId: user.userId,
-            students: []
+            students: Object.values(room.users)
         });
     } else {
         res.render('student', {
