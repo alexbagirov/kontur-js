@@ -2,8 +2,8 @@
   "name": "kontur-js",
   "version": "1.0.0",
   "scripts": {
-    "start": "node --experimental-modules server.mjs",
-    "dev": "nodemon --experimental-modules server.mjs"
+    "start": "node --experimental-modules index.mjs",
+    "dev": "nodemon --experimental-modules index.mjs"
   },
   "engines": {
     "node": "13.x"

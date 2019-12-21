@@ -2,15 +2,14 @@ import * as path from "path";
 import express from "express";
 import WebSocket from "ws";
 import session from "express-session";
-import {Teacher} from "users/teacher";
-import {Room} from "./room";
+import { Teacher } from "./users/teacher";
+import { Room } from "./users/room";
 
 const port = process.env.PORT || 5000;
 
 const app = express();
 
 const rooms = [];
-
 
 app.use(express.static(path.join(process.cwd(), "static")));
 app.use(session({

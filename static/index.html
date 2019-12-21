@@ -4,9 +4,11 @@
     <script type="module" src="/static/client.mjs"></script>
 </head>
 <body>
-    <form id="create">
-        <input type="submit" value="create" />
+    <form id="join" action="/room/join" method="post">
+        <label><input type="text" name="name"/>Name</label>
+        <label><input type="text" name="roomId"/>Room id</label>
+        <input type="submit" value="Join" />
     </form>
-</form>
+    <button id="create">Create room</button>
 </body>
 </html>
