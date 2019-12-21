@@ -70,11 +70,22 @@ app.get('/room/:id', (req, res) => {
     }
     const user = room.users[req.session.userId];
     const role = user.role === 1 ? 'teacher' : 'student';
-    res.render(role, {
-        layout: "default",
-        name: user.name,
-        roomId: req.params.id
-    });
+    if (role === 'teacher') {
+        res.render('teacher', {
+            layout: "default",
+            roomId: req.params.id,
+            userId: user.userId,
+            students: []
+        });
+    } else {
+        res.render('student', {
+            layout: "default",
+            name: user.name,
+            roomId: req.params.id,
+            userId: user.userId
+        });
+    }
+
 });
 
 const server = app.listen(port);
