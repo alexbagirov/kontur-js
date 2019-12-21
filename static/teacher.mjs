@@ -2,8 +2,8 @@ const ws = connect();
 
 ws.addEventListener('message', function (event)  {
     const data = JSON.parse(event.data);
-    if (data['type'] === 'new') {
-        handleNewStudent(data['payload']);
+    if (data['type'] === 'newStudent') {
+        handleNewStudent(data['studentName'], data['studentId']);
     } else if (data['type'] === 'question') {
         handleQuestion(data['payload']);
     } else if (data['type'] === 'answer') {
@@ -18,7 +18,8 @@ const connect = () => {
 };
 
 
-function handleNewStudent (student) {
+function handleNewStudent (name, id) {
+    const student = {name, id};
     let newDiv = document.createElement("div");
     newDiv.id = 'div' + student.id;
     newDiv.innerHTML = '<div class="col">' + 
