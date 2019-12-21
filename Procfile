@@ -1,1 +1,1 @@
-web: node --experimental-features index.mjs
+web: node --experimental-modules index.mjs
