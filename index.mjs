@@ -93,18 +93,27 @@ app.get('/room/:id', (req, res) => {
 
 app.ws('/room/ws/:id', function (ws, req) {
     ws.on('message', function (msg) {
+        const room = rooms[req.params.id];
+        const user = room.users[req.session.userId];
         const data = JSON.parse(msg);
+
         switch (data['type']) {
             case 'openQuestion':
+                room.users[data['userId']].hasQuestion = true;
+                ws.send('ok');
                 break;
             case 'openAnswer':
+                room.users[data['userId']].hasAnswer = true;
+                ws.send('ok');
                 break;
             case 'closeQuestion':
-
+                room.users[data['userId']].hasQuestion = false;
                 ws.send('ok');
                 break;
             case 'closeAnswer':
-
+                for (const user of room.users) {
+                    user.hasAnswer = false;
+                }
                 ws.send('ok');
                 break;
             case 'getUsers':
