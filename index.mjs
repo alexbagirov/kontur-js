@@ -57,6 +57,13 @@ app.post('/room/join', (req, res) => {
     const student = new Student(req.body.name);
     rooms[req.body.roomId].users[student.id] = student;
     req.session.userId = student.id;
+
+    const wss = ws.getWss(`/room/ws/${req.body.roomId}`);
+    const message = {"type": "newStudent", "studentName": student.name, "studentId": student.id};
+    for (const client of wss.clients) {
+        client.send(JSON.stringify(message));
+    }
+
     res.redirect(`/room/${req.body.roomId}`);
 });
 
@@ -128,4 +135,3 @@ app.ws('/room/ws/:id', function (ws, req) {
 });
 
 const server = app.listen(port);
-
